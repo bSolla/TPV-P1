@@ -14,7 +14,7 @@ private:
 	uint cellHeight, cellWidth;
 	uint mapHeight, mapWidth;
 	uint nBlocks;
-	Block** cells = nullptr;
+	Block*** cells = nullptr;
 	Game* game = nullptr;
 
 // ---------------------- methods ------------------------------------------------------

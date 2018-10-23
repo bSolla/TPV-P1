@@ -31,8 +31,9 @@ void BlocksMap::load (const string & filename) {
 		file >> rows >> cols;
 
 		// pointer initialization
+		cells = new Block**;
 		for (uint r = 0; r < rows; ++r) {
-			cells[r] = new Block[cols];
+			cells[r] = new Block*[cols];
 		}
 
 		// fill values in
