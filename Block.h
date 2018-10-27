@@ -2,15 +2,17 @@
 #include "Vector2D.h"
 #include "Texture.h"
 
-class Game; // just in case we need game info later into development
+class Game;
 
 enum BlockColor { blue, green, red, yellow, black, purple};
+
+const uint WALL_THICKNESS = 20;
 
 class Block {
 // --------------------- variables------------------------------------------------------
 private:
 	Vector2D position; // position in the map
-	int width, height;
+	int width = 60, height = 20;
 	int row, col; // position in the sprite sheet
 	BlockColor color;
 
@@ -20,11 +22,15 @@ private:
 // ---------------------- methods ------------------------------------------------------
 public:
 	Block () {};
-	Block (Game *gamePtr);
+	Block (Game *gamePtr, int colorIndex);
 	~Block ();
 
 	void setColor (BlockColor newColor);
-	void setScale (int newWidth, int newHeight) { width = newWidth; height = newHeight; }
 	void render () const;
+
+	int getX () const { return position.getX (); }
+	int getY () const { return position.getY (); }
+
+	void setPosition (uint matrixColumnIndex, uint matrixRowIndex);
 };
 

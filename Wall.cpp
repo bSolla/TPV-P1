@@ -20,3 +20,30 @@ void Wall::render () const {
 
 	wallTexture->render (destRect);
 }
+
+void Wall::setScale (int newHeight, int newWidth, WallType type) { 
+	width = newWidth;
+	height = newHeight;
+
+	setPosition (type);
+}
+
+
+void Wall::setPosition (WallType type) {
+	switch (type) {
+	case topW:
+		position.setX (WINDOW_ORIGIN);
+		position.setY (WINDOW_ORIGIN);
+		break;
+	case rightW:
+		position.setX (game->getMapWidth() - width);
+		position.setY (WINDOW_ORIGIN);
+		break;
+	case leftW:
+		position.setX (WINDOW_ORIGIN);
+		position.setY (WINDOW_ORIGIN);
+		break;
+	default:
+		break;
+	}
+}

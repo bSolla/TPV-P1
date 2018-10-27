@@ -3,13 +3,16 @@
 #include "Texture.h"
 
 
-class Game; // just in case we need game info later into development
+class Game; 
+
+enum WallType { topW, rightW, leftW};
+const double WINDOW_ORIGIN = 0.0;
 
 class Wall {
 // --------------------- variables------------------------------------------------------
 private:
 	Vector2D position;
-	int width, height;
+	int width, height, mapWidth;
 	Texture* wallTexture = nullptr;
 	Game* game = nullptr;
 
@@ -17,9 +20,10 @@ private:
 public:
 	Wall (Game* gamePtr, Texture* texturePtr);
 	~Wall ();
+	
+	void setScale (int newHeight, int newWidth, WallType type);
+	void setPosition (WallType type);
 
-	void setPosition (const Vector2D &newPosition) { position = newPosition; }
-	void setScale (int newHeight, int newWidth) { width = newWidth; height = newHeight; }
 	void render () const;
 };
 

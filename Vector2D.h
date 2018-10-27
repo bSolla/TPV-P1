@@ -19,5 +19,8 @@ public:
 
 	double getX () const { return x; }
 	double getY () const { return y; }
+
+	void setX (double newX) { x = newX; }
+	void setY (double newY) { y = newY; }
 };
 

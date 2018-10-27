@@ -5,24 +5,27 @@
 Game::Game () {
 	if (iniSDL ()) {
 		if (iniTextures ()) {
-			// walls --we only have 4 so writing them one by one is as long as making two 'for'
-			walls[0] = new Wall (this, textures[TextureNames::sideWall]);
-			walls[1] = new Wall (this, textures[TextureNames::sideWall]);
-			walls[2] = new Wall (this, textures[TextureNames::topWall]);
-			walls[3] = new Wall (this, textures[TextureNames::topWall]);
-			/*dog = new Dog (renderer, textures[1]);
-			helicopter = new Helicopter (renderer, textures[2]);*/
+			walls[WallType::leftW] = new Wall (this, textures[TextureNames::sideWall]);
+			walls[WallType::rightW] = new Wall (this, textures[TextureNames::sideWall]);
+			walls[WallType::topW] = new Wall (this, textures[TextureNames::topWall]);
+			
+			ball = new Ball(this);
+			paddle = new Paddle(this);
+			map = new BlocksMap(this);
 
-			//read file-> set the new window size and set wall positions
+			map->load(LEVEL_NAME);
 
+			positionObjects ();
 		}
 	}
 }
 
 
 Game::~Game () {
-	/*delete dog;
-	delete helicopter;*/
+	delete ball;
+	delete paddle;
+	delete map;
+
 	for (uint i = 0; i < NUM_TEXTURES; ++i) {
 		delete textures[i];
 	}
@@ -30,6 +33,8 @@ Game::~Game () {
 	for (uint i = 0; i < NUM_WALLS; ++i) {
 		delete walls[i];
 	}
+
+	quitSDL ();
 }
 
 
@@ -63,6 +68,24 @@ bool Game::iniTextures () {
 }
 
 
+void Game::scaleObjects (uint newMapWidth, uint newMapHeight) {
+	mapHeight = newMapHeight;
+	mapWidth = newMapWidth;
+
+	walls[WallType::leftW]->setScale (mapHeight, cellHeight, WallType::leftW);
+	walls[WallType::rightW]->setScale (mapHeight, cellHeight, WallType::rightW);
+	walls[WallType::topW]->setScale (cellHeight, mapWidth, WallType::topW);
+
+	SDL_SetWindowSize (window, mapWidth, mapHeight);
+}
+
+
+void Game::positionObjects () {
+	paddle->setInitialPosition (mapWidth, mapHeight - cellHeight * 2);
+	ball->setInitialPosition (mapWidth, mapHeight - cellHeight * 3);
+}
+
+
 void Game::renderBackground () const{
 	for (uint i = 0; i < NUM_WALLS; ++i) {
 		walls[i]->render ();
@@ -73,16 +96,23 @@ void Game::renderBackground () const{
 void Game::handleEvents () {
 	SDL_Event event;  
 
-	if (SDL_PollEvent (&event) && !end) {
+	if (SDL_PollEvent (&event)) {
 		if (event.type == SDL_QUIT) {
-			end == true;
+			end = true;
 		}
 	}
 }
 
 
 void Game::render () const {
+	SDL_RenderClear (renderer);
 
+	renderBackground ();
+	map->render ();
+	paddle->render ();
+	ball->render ();
+	
+	SDL_RenderPresent (renderer);
 }
 
 
@@ -94,8 +124,6 @@ void Game::update () {
 
 
 void Game::run () {
-	renderBackground ();
-
 	while (!end) {
 		render ();
 		update ();
@@ -104,3 +132,9 @@ void Game::run () {
 	}
 }
 
+
+void Game::quitSDL () {
+	SDL_DestroyRenderer (renderer);
+	SDL_DestroyWindow (window);
+	SDL_Quit ();
+}
