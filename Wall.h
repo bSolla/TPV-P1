@@ -1,4 +1,5 @@
 #pragma once
+#include "checkML.h"
 #include "Vector2D.h"
 #include "Texture.h"
 
@@ -20,10 +21,13 @@ private:
 public:
 	Wall (Game* gamePtr, Texture* texturePtr);
 	~Wall ();
-	
+
+	// sets the correct proportions so the rendered wall can fit the screen
 	void setScale (int newHeight, int newWidth, WallType type);
+	// sets the wall's position depending on the type (top, left or right)
 	void setPosition (WallType type);
 
+	// renders the wall
 	void render () const;
 };
 

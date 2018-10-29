@@ -25,3 +25,19 @@ void Paddle::setInitialPosition (int mapWidth, int verticalOffset) {
 	position.setX (double (mapWidth) / 2);
 	position.setY (double (verticalOffset));
 }
+
+
+void Paddle::handleEvents (SDL_Event &e) {
+	if (e.type == SDL_KEYDOWN) {
+		switch (e.key.keysym.sym) {
+		case SDLK_LEFT:
+			// add left speed 
+			break;
+		case SDLK_RIGHT:
+			// add right speed
+			break;
+		default:
+			break;
+		}
+	}
+}

@@ -52,6 +52,7 @@ void BlocksMap::load (const string & filename) {
 				else {
 					cells[c][r] = new Block (game, BlockColor(color));
 					cells[c][r]->setPosition (c, r);
+					++nBlocks;
 				}
 			}
 		}

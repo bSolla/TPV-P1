@@ -13,7 +13,7 @@ Game::Game () {
 			paddle = new Paddle(this);
 			map = new BlocksMap(this);
 
-			map->load(LEVEL_NAME);
+			map->load(LEVEL_SHARED_NAME + to_string(currentLevel) + LEVEL_EXTENSION);
 
 			positionObjects ();
 		}
@@ -100,6 +100,22 @@ void Game::handleEvents () {
 		if (event.type == SDL_QUIT) {
 			end = true;
 		}
+		else {
+			paddle->handleEvents ();
+		}
+	}
+}
+
+
+void Game::handleLevelUp () {
+	if (levelClear) {
+		delete map;	// delete the old map and make a new one for the new level
+		map = new BlocksMap (this);
+
+		map->load (LEVEL_SHARED_NAME + to_string (currentLevel) + LEVEL_EXTENSION);
+		positionObjects ();
+
+		levelClear = false;
 	}
 }
 
@@ -117,9 +133,11 @@ void Game::render () const {
 
 
 void Game::update () {
-
+	//ball->update();
+	//paddle->update();
 
 	handleEvents ();
+	handleLevelUp ();
 }
 
 
