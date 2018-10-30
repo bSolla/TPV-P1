@@ -66,11 +66,6 @@ public:
 	Game ();
 	~Game ();
 
-	// takes in the map dimensions calculated in BlocksMap::load() and scales the walls and window to fit accordingly
-	void scaleObjects (uint newMapWidth, uint newMapHeight);
-	// main game loop, runs until a quit event is detected
-	void run ();
-
 	// getter functions
 	uint getMapWidth () const { return mapWidth; }
 	Texture* getTexture (TextureNames textureName) const { return textures[textureName]; }
@@ -78,6 +73,14 @@ public:
 
 	// setter functions
 	void setLevelClear () { levelClear = true; }
+
+	// takes in the map dimensions calculated in BlocksMap::load() and scales the walls and window to fit accordingly
+	void scaleObjects (uint newMapWidth, uint newMapHeight);
+	// main game loop, runs until a quit event is detected
+	void run ();
+	// returns wether the ball collides with an object or not, and if it does, returns the collision vector
+	bool collides (SDL_Rect ballRect, Vector2D ballSpeed, Vector2D &collVector);
+	
 
 private:
 	// initializes SDL and returns true if everything goes smoothly-- false is used to abort

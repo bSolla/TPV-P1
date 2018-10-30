@@ -101,7 +101,7 @@ void Game::handleEvents () {
 			end = true;
 		}
 		else {
-			paddle->handleEvents ();
+			paddle->handleEvents (event);
 		}
 	}
 }
@@ -120,6 +120,13 @@ void Game::handleLevelUp () {
 }
 
 
+bool Game::collides (SDL_Rect ballRect, Vector2D ballSpeed, Vector2D &collVector) {
+
+
+	return false;
+}
+
+
 void Game::render () const {
 	SDL_RenderClear (renderer);
 
@@ -134,7 +141,7 @@ void Game::render () const {
 
 void Game::update () {
 	//ball->update();
-	//paddle->update();
+	paddle->update();
 
 	handleEvents ();
 	handleLevelUp ();

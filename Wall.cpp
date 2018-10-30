@@ -25,25 +25,52 @@ void Wall::setScale (int newHeight, int newWidth, WallType type) {
 	width = newWidth;
 	height = newHeight;
 
-	setPosition (type);
+	setVectors (type);
 }
 
 
-void Wall::setPosition (WallType type) {
+void Wall::setVectors (WallType type) {
 	switch (type) {
 	case topW:
 		position.setX (WINDOW_ORIGIN);
 		position.setY (WINDOW_ORIGIN);
+		collisionVector.setX (0.0);
+		collisionVector.setY (1.0);
 		break;
 	case rightW:
 		position.setX (game->getMapWidth() - width);
 		position.setY (WINDOW_ORIGIN);
+		collisionVector.setX (-1.0);
+		collisionVector.setY (0.0);
 		break;
 	case leftW:
 		position.setX (WINDOW_ORIGIN);
 		position.setY (WINDOW_ORIGIN);
+		collisionVector.setX (1.0);
+		collisionVector.setY (0.0);
 		break;
 	default:
 		break;
 	}
 }
+
+
+bool Wall::collides (SDL_Rect ballRect, Vector2D &collVector) {
+	bool doesItCollide = false;
+
+	if (collisionVector.getX() == -1.0) { // right wall
+		if (ballRect.x + ballRect.w >= position.getX ()) {
+			doesItCollide = true;
+			collVector = collisionVector;
+		}
+	}
+	else { // top or left wall
+		if (ballRect.x <= (position.getX () + width) && ballRect.y <= (position.getY () + height)) {
+			doesItCollide = true;
+			collVector = collisionVector;
+		}
+	}
+
+	return doesItCollide;
+}
+

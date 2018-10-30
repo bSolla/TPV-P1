@@ -9,6 +9,8 @@ class Paddle {
 // --------------------- variables------------------------------------------------------
 private:
 	int height = 20, width = 60;
+	uint mapWidth = 0;
+	double basicIncrement = 10;
 	Vector2D position, speed;
 
 	Texture* texture = nullptr;
@@ -25,5 +27,7 @@ public:
 	void setInitialPosition (int mapWidth, int verticalOffset);
 	// given a SDL_Event e, checks for left/right arrows and changes the paddle's speed;
 	void handleEvents (SDL_Event &e);
+	// updates the paddle position
+	void update ();
 };
 

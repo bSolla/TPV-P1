@@ -6,6 +6,7 @@
 Paddle::Paddle (Game* gamePtr) {
 	game = gamePtr;
 	texture = game->getTexture (TextureNames::paddle_);
+	speed.setY (0.0);
 }
 
 
@@ -31,13 +32,28 @@ void Paddle::handleEvents (SDL_Event &e) {
 	if (e.type == SDL_KEYDOWN) {
 		switch (e.key.keysym.sym) {
 		case SDLK_LEFT:
-			// add left speed 
+			speed.setX (-basicIncrement);
 			break;
 		case SDLK_RIGHT:
-			// add right speed
+			speed.setX (basicIncrement);
 			break;
 		default:
 			break;
 		}
 	}
+	else if (e.type == SDL_KEYUP) {
+		speed.setX (0.0);
+	}
+}
+
+
+void Paddle::update () {
+	mapWidth = game->getMapWidth ();
+
+	if (position.getX () > 20 && speed.getX() < 0) {
+		position = position + speed;
+	}
+	if (position.getX () < (mapWidth - width - 20) && speed.getX() > 0)
+		position = position + speed;
+	
 }
