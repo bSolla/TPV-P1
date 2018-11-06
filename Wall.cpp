@@ -21,6 +21,7 @@ void Wall::render () const {
 	wallTexture->render (destRect);
 }
 
+
 void Wall::setScale (int newHeight, int newWidth, WallType type) { 
 	width = newWidth;
 	height = newHeight;
@@ -59,13 +60,13 @@ bool Wall::collides (SDL_Rect ballRect, Vector2D &collVector) {
 	bool doesItCollide = false;
 
 	if (collisionVector.getX() == -1.0) { // right wall
-		if (ballRect.x + ballRect.w >= position.getX ()) {
+		if (ballRect.x + ballRect.w >= position.getX ()) { // the right side of the collision box is over the wall
 			doesItCollide = true;
 			collVector = collisionVector;
 		}
 	}
 	else { // top or left wall
-		if (ballRect.x <= (position.getX () + width) && ballRect.y <= (position.getY () + height)) {
+		if (ballRect.x <= (position.getX () + width) && ballRect.y <= (position.getY () + height)) { // the left and top sides of the collision box are over the wall
 			doesItCollide = true;
 			collVector = collisionVector;
 		}

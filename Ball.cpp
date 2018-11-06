@@ -25,3 +25,10 @@ void Ball::render () const {
 
 	texture->render (destRect);
 }
+
+
+void Ball::update () {
+	// todo: pos += vel; 
+	//		calculate the rect
+	//		call game->collides
+}

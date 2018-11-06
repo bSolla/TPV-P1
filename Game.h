@@ -42,6 +42,10 @@ const TextureAttributes TEXTURE_ATTRIBUTES[NUM_TEXTURES] =
 const string LEVEL_SHARED_NAME = "level0";
 const string LEVEL_EXTENSION = ".ark";
 
+
+
+
+
 class Game {
 // --------------------- variables------------------------------------------------------
 private: 

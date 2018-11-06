@@ -1,7 +1,10 @@
 #pragma once
+#include <math.h>
 #include "checkML.h"
 #include "Texture.h"
 #include "Vector2D.h"
+
+const uint MAX_ANGLE = 45;
 
 class Game;
 
@@ -27,6 +30,8 @@ public:
 	void setInitialPosition (int mapWidth, int verticalOffset);
 	// given a SDL_Event e, checks for left/right arrows and changes the paddle's speed;
 	void handleEvents (SDL_Event &e);
+	// checks if the ball collides with the paddle and if so, returns the collision vector (with a degree proportional to the paddle collision point)
+	bool collides (SDL_Rect ballRect, Vector2D &collVector);
 	// updates the paddle position
 	void update ();
 };

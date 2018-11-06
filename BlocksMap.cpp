@@ -29,7 +29,7 @@ void BlocksMap::load (const string & filename) {
 	else {
 		file >> rows >> cols;
 									
-		mapWidth = cellWidth * cols + cellHeight * 2; // to account for the walls we add cellHeight * 2
+		mapWidth = cellWidth * cols + cellHeight * 2; // to account for the walls we add cellHeight * 2 (the thickness of the walls is the same as the height of the rest of sprites)
 		mapHeight = 2 * (cellHeight * rows) + cellHeight * 2;
 
 		game->scaleObjects (mapWidth, mapHeight);
@@ -115,7 +115,22 @@ Block* BlocksMap::collides(const SDL_Rect& ballRect, const Vector2D& ballVel, Ve
 	del espacio del mapa) devuelve nullptr. 	
 */
 Block* BlocksMap::blockAt(const Vector2D& p){
-	return nullptr;
+	Block* blockPtr;
+	int wallThickness = cellHeight; // we have set the wall thickness to be the same as the rest of the sprites' height
+
+	if (p.getX() - wallThickness <= 0  || p.getX() >= mapWidth - wallThickness) { // out of the map on the left side   OR  out of the map on the right side 
+		blockPtr = nullptr;
+	}
+	else {
+		int c, r;
+
+		c = int ((p.getX () - wallThickness) / cols);
+		r = int ((p.getX () - wallThickness) / rows);
+
+		blockPtr = cells[c][r]; // if the cell is empty, it will return nullptr-- no need to make sure ourselves
+	}
+
+	return blockPtr;
 }
 
 

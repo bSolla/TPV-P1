@@ -19,10 +19,11 @@ public:
 	Ball (Game* gamePtr);
 	~Ball ();
 
-	// renders the ball
-	void render () const;
-
 	// initializes the ball position in the center of the map, just over the paddle
 	void setInitialPosition (int mapWidth, int verticalOffset);
+	// renders the ball
+	void render () const;
+	// updates the ball position
+	void update ();
 };
 

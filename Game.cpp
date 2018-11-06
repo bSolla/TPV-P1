@@ -121,9 +121,27 @@ void Game::handleLevelUp () {
 
 
 bool Game::collides (SDL_Rect ballRect, Vector2D ballSpeed, Vector2D &collVector) {
+	bool ballCollides = false;
 
+	// if collides with any of the walls...
+	if (walls[WallType::leftW]->collides (ballRect, collVector) ||
+		walls[WallType::rightW]->collides(ballRect, collVector) ||
+		walls[WallType::topW]->collides(ballRect, collVector)) {
+		
+		ballCollides = true;
+	 }
 
-	return false;
+	// if collides with the blocks...
+	else if (map->collides (ballRect, ballSpeed, collVector)) {
+		ballCollides = true;
+	}
+	
+	// if collides with the paddle...
+	else if (paddle->collides (ballRect, collVector)) {
+		ballCollides = true;
+	}
+
+	return ballCollides;
 }
 
 
