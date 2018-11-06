@@ -9,8 +9,8 @@ BlocksMap::BlocksMap (Game* gamePtr) {
 
 BlocksMap::~BlocksMap () {
 	if (cells != nullptr) {
-		for (int c = 0; c < cols; ++c) {
-			for (int r = 0; r < rows; ++r) {
+		for (int r = 0; r < rows; ++r) {
+			for (int c = 0; c < cols; ++c) {
 				delete cells[r][c];
 			}
 		}
@@ -42,16 +42,16 @@ void BlocksMap::load (const string & filename) {
 		}
 
 		// fill values in
-		for (uint r = 0; r < cols; ++r) {
-			for (uint c = 0; c < rows; ++c) {
+		for (uint r = 0; r < rows; ++r) {
+			for (uint c = 0; c < cols; ++c) {
 				file >> color;
 
 				if (color == 0) { 
-					cells[c][r] = nullptr;
+					cells[r][c] = nullptr;
 				}
 				else {
-					cells[c][r] = new Block (game, BlockColor(color));
-					cells[c][r]->setPosition (c, r);
+					cells[r][c] = new Block (game, BlockColor(color));
+					cells[r][c]->setPosition (c, r);
 					++nBlocks;
 				}
 			}
@@ -118,16 +118,19 @@ Block* BlocksMap::blockAt(const Vector2D& p){
 	Block* blockPtr;
 	int wallThickness = cellHeight; // we have set the wall thickness to be the same as the rest of the sprites' height
 
-	if (p.getX() - wallThickness <= 0  || p.getX() >= mapWidth - wallThickness) { // out of the map on the left side   OR  out of the map on the right side 
+	if (p.getX() - wallThickness <= 0  || p.getX() >= mapWidth - wallThickness || p.getY() >= (rows * cellHeight + wallThickness)) { // out of the map on the left side   OR  out of the map on the right side  OR  too low to collide
 		blockPtr = nullptr;
 	}
 	else {
 		int c, r;
 
-		c = int ((p.getX () - wallThickness) / cols);
-		r = int ((p.getX () - wallThickness) / rows);
+		c = int ((p.getX () - wallThickness) / cellWidth);
+		r = int ((p.getY () - wallThickness) / cellHeight);
 
-		blockPtr = cells[c][r]; // if the cell is empty, it will return nullptr-- no need to make sure ourselves
+		if (cells[r][c] != nullptr)
+			blockPtr = cells[r][c];
+		else
+			blockPtr = nullptr;
 	}
 
 	return blockPtr;
@@ -135,10 +138,10 @@ Block* BlocksMap::blockAt(const Vector2D& p){
 
 
 void BlocksMap::render () const {
-	for (int c = 0; c < cols; ++c) {
-		for (int r = 0; r < rows; ++r) {
-			if (cells[c][r] != nullptr)
-				cells[c][r]->render ();
+	for (int r = 0; r < rows; ++r) {
+		for (int c = 0; c < cols; ++c) {
+			if (cells[r][c] != nullptr)
+				cells[r][c]->render ();
 		}
 	}
 }

@@ -132,7 +132,7 @@ bool Game::collides (SDL_Rect ballRect, Vector2D ballSpeed, Vector2D &collVector
 	 }
 
 	// if collides with the blocks...
-	else if (map->collides (ballRect, ballSpeed, collVector)) {
+	else if (map->collides (ballRect, ballSpeed, collVector) != nullptr) {
 		ballCollides = true;
 	}
 	
@@ -158,7 +158,7 @@ void Game::render () const {
 
 
 void Game::update () {
-	//ball->update();
+	ball->update();
 	paddle->update();
 
 	handleEvents ();

@@ -28,7 +28,33 @@ void Ball::render () const {
 
 
 void Ball::update () {
-	// todo: pos += vel; 
-	//		calculate the rect
-	//		call game->collides
+	position = position + speed;
+	SDL_Rect ballRect { position.getX (), position.getY (), cellSize, cellSize };
+	Vector2D collVect;
+
+	if (game->collides (ballRect, speed, collVect)) {
+		if (collVect.getX () == 0.0) {
+			speed.setY (-1 * speed.getY ());
+		}
+		else if (collVect.getY () == 0.0) {
+			speed.setX (-1 * speed.getX ());
+		}
+		else { // collision with the paddle
+			Vector2D collVectCopy = collVect;
+			double xAux = -1 * collVect.getX () * speed.getX ();
+			double yAux = -1 * collVect.getY () * speed.getY ();
+
+			if (xAux == 0) {
+				if (collVectCopy.getX () < 0)
+					xAux = -(MAX_SPEED_MODULE + yAux);
+				else 
+					xAux = MAX_SPEED_MODULE + yAux;
+			}
+
+			speed.setX (xAux);
+			speed.setY (yAux);
+		}
+
+		position = position + speed;
+	}
 }

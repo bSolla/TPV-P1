@@ -5,6 +5,7 @@
 #include "Vector2D.h"
 
 const uint MAX_ANGLE = 45;
+const double RADIAN_CONVERSION_FACTOR = M_PI / 180;
 
 class Game;
 

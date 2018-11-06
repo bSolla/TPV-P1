@@ -3,13 +3,16 @@
 #include "Texture.h"
 #include "Vector2D.h"
 
+
+const double MAX_SPEED_MODULE = 5;
+
 class Game;
 
 class Ball {
 // --------------------- variables------------------------------------------------------
 private:
 	int cellSize = 20;
-	Vector2D position, movDirection;
+	Vector2D position, speed { 0, -3 };
 
 	Texture* texture = nullptr;
 	Game* game = nullptr;
