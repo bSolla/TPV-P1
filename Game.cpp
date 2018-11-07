@@ -1,7 +1,6 @@
 #include "Game.h"
 
 
-
 Game::Game () {
 	iniSDL ();
 	iniTextures ();
@@ -26,6 +25,7 @@ Game::~Game () {
 	delete ball;
 	delete paddle;
 	delete map;
+	delete infoBar;
 
 	for (uint i = 0; i < NUM_TEXTURES; ++i) {
 		delete textures[i];
@@ -34,7 +34,7 @@ Game::~Game () {
 	for (uint i = 0; i < NUM_WALLS; ++i) {
 		delete walls[i];
 	}
-
+	
 	quitSDL ();
 }
 
