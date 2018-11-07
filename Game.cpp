@@ -112,10 +112,16 @@ void Game::handleLevelUp () {
 		delete map;	// delete the old map and make a new one for the new level
 		map = new BlocksMap (this);
 
-		map->load (LEVEL_SHARED_NAME + to_string (currentLevel) + LEVEL_EXTENSION);
-		positionObjects ();
+		currentLevel++;
 
-		levelClear = false;
+		if (currentLevel > MAX_LEVEL)
+			end = true;
+		else {
+			map->load (LEVEL_SHARED_NAME + to_string (currentLevel) + LEVEL_EXTENSION);
+			positionObjects ();
+
+			levelClear = false;
+		}
 	}
 }
 
@@ -164,6 +170,7 @@ void Game::render () const {
 void Game::update () {
 	ball->update();
 	paddle->update();
+	map->update ();
 
 	handleEvents ();
 	handleLevelUp ();

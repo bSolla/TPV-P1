@@ -152,6 +152,8 @@ void BlocksMap::setBlockNull (Block* blockPtr) {
 
 	delete cells[r][c];
 	cells[r][c] = nullptr;
+
+	nBlocks--;
 }
 
 
@@ -161,5 +163,12 @@ void BlocksMap::render () const {
 			if (cells[r][c] != nullptr)
 				cells[r][c]->render ();
 		}
+	}
+}
+
+
+void BlocksMap::update () {
+	if (nBlocks <= 0) {
+		game->setLevelClear ();
 	}
 }

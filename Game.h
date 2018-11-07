@@ -41,6 +41,7 @@ const TextureAttributes TEXTURE_ATTRIBUTES[NUM_TEXTURES] =
 
 const string LEVEL_SHARED_NAME = "level0";
 const string LEVEL_EXTENSION = ".ark";
+const uint MAX_LEVEL = 3;
 
 
 

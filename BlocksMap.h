@@ -23,7 +23,7 @@ public:
 	BlocksMap (Game* gamePtr);
 	~BlocksMap ();
 
-	// sets the specified block to nullPtr
+	// deletes and sets the specified block to nullPtr
 	void setBlockNull (Block* blockPtr);
 
 	// loads data from the .ark files and saves it to a Block matrix (cells); also scales the window size according to the number of rows and cols
@@ -32,8 +32,11 @@ public:
 	Block* blockAt (const Vector2D& p);
 	// renders the whole Block matrix
 	void render () const;
+	// checks if the level is clear, and if so calls game->setLevelClear
+	void update ();
 
 private:
+	// given a point, calculates the row and column it occupies in the matrix
 	void getBlockMatrixCoordinates (const Vector2D &point, int &c, int &r);
 };
 

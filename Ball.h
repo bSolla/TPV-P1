@@ -5,7 +5,7 @@
 
 
 const double MAX_SPEED_MODULE = 6;
-const double BASE_Y_SPEED = -2;
+const double BASE_SPEED = -2;
 
 class Game;
 
@@ -13,7 +13,7 @@ class Ball {
 // --------------------- variables------------------------------------------------------
 private:
 	int cellSize = 20;
-	Vector2D position, speed { 0, BASE_Y_SPEED*2 };
+	Vector2D position, speed { BASE_SPEED, BASE_SPEED*2 };
 
 	Texture* texture = nullptr;
 	Game* game = nullptr;
