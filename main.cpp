@@ -9,12 +9,18 @@ using namespace std;
 
 int main(int argc, char* argv[]){
 	_CrtSetDbgFlag ( _CRTDBG_LEAK_CHECK_DF);
+	
+	try {
+		Game* game = new Game();
 
-	Game* game = new Game ();
+		game->run();
 
-	game->run ();
+		delete game;
+	}
 
-	delete game;
+	catch (string error) {
+		cout << error << endl;
+	}
 
 	return 0;
 }

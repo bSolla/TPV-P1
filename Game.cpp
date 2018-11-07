@@ -3,21 +3,22 @@
 
 
 Game::Game () {
-	if (iniSDL ()) {
-		if (iniTextures ()) {
-			walls[WallType::leftW] = new Wall (this, textures[TextureNames::sideWall]);
-			walls[WallType::rightW] = new Wall (this, textures[TextureNames::sideWall]);
-			walls[WallType::topW] = new Wall (this, textures[TextureNames::topWall]);
+	iniSDL ();
+	iniTextures ();
+	
+	walls[WallType::leftW] = new Wall (this, textures[TextureNames::sideWall]);
+	walls[WallType::rightW] = new Wall (this, textures[TextureNames::sideWall]);
+	walls[WallType::topW] = new Wall (this, textures[TextureNames::topWall]);
 			
-			ball = new Ball(this);
-			paddle = new Paddle(this);
-			map = new BlocksMap(this);
+	ball = new Ball(this);
+	paddle = new Paddle(this);
+	map = new BlocksMap(this);
+			
+	map->load(LEVEL_SHARED_NAME + to_string(currentLevel) + LEVEL_EXTENSION);
 
-			map->load(LEVEL_SHARED_NAME + to_string(currentLevel) + LEVEL_EXTENSION);
+	infoBar = new InfoBar (this);
 
-			positionObjects ();
-		}
-	}
+	positionObjects ();
 }
 
 
@@ -38,23 +39,19 @@ Game::~Game () {
 }
 
 
-bool Game::iniSDL () {
-	bool everythingOk = true;
+void Game::iniSDL () {
 
 	SDL_Init(SDL_INIT_EVERYTHING); 
 	window = SDL_CreateWindow("test", WIN_X, WIN_Y, WIN_WIDTH, WIN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE); 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); 
 	
 	if (window == nullptr || renderer == nullptr) {
-		cout << "Error initializing SDL\n";
-		everythingOk = false;
+		throw "Error initializing SDL\n";
 	}
-
-	return everythingOk;
 }
 
 
-bool Game::iniTextures () {
+void Game::iniTextures () {
 	string errorMsg;
 
 	for (uint i = 0; i < NUM_TEXTURES; ++i) {
@@ -62,9 +59,8 @@ bool Game::iniTextures () {
 	}
 
 	errorMsg = SDL_GetError ();
-	cout << errorMsg;
-
-	return errorMsg == ""; // true if sdl_getError didn't catch any errors
+	if (errorMsg != "")
+		throw errorMsg;
 }
 
 
@@ -72,8 +68,8 @@ void Game::scaleObjects (uint newMapWidth, uint newMapHeight) {
 	mapHeight = newMapHeight;
 	mapWidth = newMapWidth;
 
-	walls[WallType::leftW]->setScale (mapHeight, cellHeight, WallType::leftW);
-	walls[WallType::rightW]->setScale (mapHeight, cellHeight, WallType::rightW);
+	walls[WallType::leftW]->setScale (mapHeight - cellHeight, cellHeight, WallType::leftW); // -cellHeight to account for the info bar
+	walls[WallType::rightW]->setScale (mapHeight - cellHeight, cellHeight, WallType::rightW);
 	walls[WallType::topW]->setScale (cellHeight, mapWidth, WallType::topW);
 
 	SDL_SetWindowSize (window, mapWidth, mapHeight);
@@ -81,8 +77,8 @@ void Game::scaleObjects (uint newMapWidth, uint newMapHeight) {
 
 
 void Game::positionObjects () {
-	paddle->setInitialPosition (mapWidth, mapHeight - cellHeight * 2);
-	ball->setInitialPosition (mapWidth, mapHeight - cellHeight * 3);
+	paddle->setInitialPosition (mapWidth, mapHeight - cellHeight * 3);
+	ball->setInitialPosition (mapWidth, mapHeight - cellHeight * 4);
 }
 
 
@@ -111,6 +107,7 @@ void Game::handleLevelUp () {
 	if (levelClear) {
 		delete map;	// delete the old map and make a new one for the new level
 		map = new BlocksMap (this);
+		delete infoBar; // delete the old info bar to make a new one
 
 		currentLevel++;
 
@@ -118,10 +115,31 @@ void Game::handleLevelUp () {
 			end = true;
 		else {
 			map->load (LEVEL_SHARED_NAME + to_string (currentLevel) + LEVEL_EXTENSION);
+			
+			seconds = 0;
+			minutes = 0;
+
+			infoBar = new InfoBar (this);
 			positionObjects ();
 
 			levelClear = false;
 		}
+	}
+}
+
+
+void Game::handleTime () {
+	currentTicks = SDL_GetTicks ();
+
+	if (currentTicks > lastTicks + MILLISECONDS_IN_A_TICK) {
+		seconds++;
+
+		if (seconds > 59) {
+			seconds = 0;
+			minutes++;
+		}
+
+		lastTicks = currentTicks;
 	}
 }
 
@@ -162,7 +180,8 @@ void Game::render () const {
 	map->render ();
 	paddle->render ();
 	ball->render ();
-	
+	infoBar->render (seconds, minutes, currentLevel);
+
 	SDL_RenderPresent (renderer);
 }
 
@@ -174,6 +193,7 @@ void Game::update () {
 
 	handleEvents ();
 	handleLevelUp ();
+	handleTime ();
 }
 
 

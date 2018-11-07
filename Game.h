@@ -8,6 +8,7 @@
 #include "BlocksMap.h"
 #include "Paddle.h"
 #include "Wall.h"
+#include "InfoBar.h"
 
 // ------------------ type definitions ---------------------------------------------------
 struct TextureAttributes {
@@ -28,6 +29,7 @@ const uint NUM_TEXTURES = 5;
 const uint NUM_WALLS = 3;
 
 const uint DELAY = 60;
+const uint MILLISECONDS_IN_A_TICK = 1000;
 
 const string IMAGES_PATH = "images\\";
 const TextureAttributes TEXTURE_ATTRIBUTES[NUM_TEXTURES] = 
@@ -56,11 +58,15 @@ private:
 	BlocksMap* map = nullptr;
 	Ball* ball = nullptr;
 	Paddle* paddle = nullptr;
+	InfoBar* infoBar = nullptr;
 
 	bool end = false;
 	bool gameOver = false;
 	bool levelClear = false;
+
 	uint currentLevel = 1;
+	uint seconds = 0, minutes = 0;
+	uint lastTicks = 0, currentTicks = 0;
 
 	uint cellHeight = 20, cellWidth = 60;
 	uint mapHeight, mapWidth;
@@ -89,10 +95,10 @@ public:
 	
 
 private:
-	// initializes SDL and returns true if everything goes smoothly-- false is used to abort
-	bool iniSDL ();
-	// initializes all textures and returns true if everything went smoothly-- false used to abort
-	bool iniTextures ();
+	// initializes SDL 
+	void iniSDL ();
+	// initializes all textures
+	void iniTextures ();
 	// gives the ball and paddle their initial positions, calculated from the map dimensions
 	void positionObjects ();
 
@@ -102,6 +108,8 @@ private:
 	void handleEvents ();
 	// if the control bool levelClear is true, deletes the old BlocksMap, creates a new one and reads all the corresponding info
 	void handleLevelUp ();
+	// keeps track of the time elapsed since starting a level
+	void handleTime ();
 	// calls the respective render methods from ball, paddle and map and then draws 
 	void render () const;
 	// calls the update methods from ball and paddle
