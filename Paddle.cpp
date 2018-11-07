@@ -61,10 +61,11 @@ bool Paddle::collides (SDL_Rect ballRect, Vector2D &collVector) {
 		int mid = position.getX () + (width / 2);
 		double n = cos (MAX_ANGLE * RADIAN_CONVERSION_FACTOR);  
 
-		double d = (n * double (xCenterBall - mid));
-		double f = (double (mid) - position.getX ());
+		// for debugging, delete after it's done
+		//double d = (n * double (xCenterBall - mid));
+		//double f = (position.getX () - double (mid) );
 
-		collVector.setX ((n * double(xCenterBall - mid)) / (double(mid) - position.getX ()));
+		collVector.setX ((n * double(xCenterBall - mid)) / (position.getX () - double(mid)));
 		collVector.setY (sqrt (1.0 - pow (collVector.getX (), 2)));
 
 		ballCollides = true;

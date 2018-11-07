@@ -44,8 +44,6 @@ const string LEVEL_EXTENSION = ".ark";
 
 
 
-
-
 class Game {
 // --------------------- variables------------------------------------------------------
 private: 
@@ -59,6 +57,7 @@ private:
 	Paddle* paddle = nullptr;
 
 	bool end = false;
+	bool gameOver = false;
 	bool levelClear = false;
 	uint currentLevel = 1;
 
@@ -72,11 +71,13 @@ public:
 
 	// getter functions
 	uint getMapWidth () const { return mapWidth; }
+	uint getMapHeight () const { return mapHeight; }
 	Texture* getTexture (TextureNames textureName) const { return textures[textureName]; }
 	SDL_Renderer* getRenderer () const { return renderer; }
 
 	// setter functions
 	void setLevelClear () { levelClear = true; }
+	void setGameOver () { gameOver = true; }
 
 	// takes in the map dimensions calculated in BlocksMap::load() and scales the walls and window to fit accordingly
 	void scaleObjects (uint newMapWidth, uint newMapHeight);

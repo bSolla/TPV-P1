@@ -4,7 +4,8 @@
 #include "Vector2D.h"
 
 
-const double MAX_SPEED_MODULE = 5;
+const double MAX_SPEED_MODULE = 6;
+const double BASE_Y_SPEED = -2;
 
 class Game;
 
@@ -12,7 +13,7 @@ class Ball {
 // --------------------- variables------------------------------------------------------
 private:
 	int cellSize = 20;
-	Vector2D position, speed { 0, -3 };
+	Vector2D position, speed { 0, BASE_Y_SPEED*2 };
 
 	Texture* texture = nullptr;
 	Game* game = nullptr;
@@ -26,6 +27,10 @@ public:
 	void setInitialPosition (int mapWidth, int verticalOffset);
 	// renders the ball
 	void render () const;
+	// checks and handles the collisions
+	void checkCollisions ();
+	// checks if the ball has fallen down the screen
+	bool checkBallOut ();
 	// updates the ball position
 	void update ();
 };

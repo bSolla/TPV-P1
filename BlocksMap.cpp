@@ -110,6 +110,14 @@ Block* BlocksMap::collides(const SDL_Rect& ballRect, const Vector2D& ballVel, Ve
 }
 
 
+void BlocksMap::getBlockMatrixCoordinates (const Vector2D &point, int &c, int &r) {
+	int wallThickness = cellHeight; // we have set the wall thickness to be the same as the rest of the sprites' height
+
+	c = int ((point.getX () - wallThickness) / cellWidth);
+	r = int ((point.getY () - wallThickness) / cellHeight);
+}
+
+
 /*  Devuelve el puntero al bloque del mapa de bloques al que pertenece el punto p.
 	En caso de no haber bloque en ese punto (incluido el caso de que p esté fuera
 	del espacio del mapa) devuelve nullptr. 	
@@ -124,8 +132,7 @@ Block* BlocksMap::blockAt(const Vector2D& p){
 	else {
 		int c, r;
 
-		c = int ((p.getX () - wallThickness) / cellWidth);
-		r = int ((p.getY () - wallThickness) / cellHeight);
+		getBlockMatrixCoordinates (p, c, r);
 
 		if (cells[r][c] != nullptr)
 			blockPtr = cells[r][c];
@@ -134,6 +141,17 @@ Block* BlocksMap::blockAt(const Vector2D& p){
 	}
 
 	return blockPtr;
+}
+
+
+void BlocksMap::setBlockNull (Block* blockPtr) {
+	Vector2D blockPos (blockPtr->getX (), blockPtr->getY ());
+	int c, r;
+
+	getBlockMatrixCoordinates (blockPos, c, r);
+
+	delete cells[r][c];
+	cells[r][c] = nullptr;
 }
 
 

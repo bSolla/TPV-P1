@@ -27,8 +27,7 @@ void Ball::render () const {
 }
 
 
-void Ball::update () {
-	position = position + speed;
+void Ball::checkCollisions () {
 	SDL_Rect ballRect { position.getX (), position.getY (), cellSize, cellSize };
 	Vector2D collVect;
 
@@ -41,8 +40,8 @@ void Ball::update () {
 		}
 		else { // collision with the paddle
 			Vector2D collVectCopy = collVect;
-			double xAux = -1 * collVect.getX () * speed.getX ();
-			double yAux = -1 * collVect.getY () * speed.getY ();
+			double xAux = -1 * collVect.getX () * MAX_SPEED_MODULE;
+			double yAux = -1 * collVect.getY () * MAX_SPEED_MODULE;
 
 			if (xAux == 0) {
 				if (collVectCopy.getX () < 0)
@@ -56,5 +55,20 @@ void Ball::update () {
 		}
 
 		position = position + speed;
+	}
+}
+
+
+bool Ball::checkBallOut () {
+	return (position.getY () + cellSize > game->getMapHeight ());
+}
+
+
+void Ball::update () {
+	position = position + speed;
+	checkCollisions ();
+
+	if (checkBallOut ()) {
+		game->setGameOver ();
 	}
 }

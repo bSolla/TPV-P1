@@ -122,20 +122,24 @@ void Game::handleLevelUp () {
 
 bool Game::collides (SDL_Rect ballRect, Vector2D ballSpeed, Vector2D &collVector) {
 	bool ballCollides = false;
+	Block* blockPtr = nullptr;
 
-	// if collides with any of the walls...
-	if (walls[WallType::leftW]->collides (ballRect, collVector) ||
+	// if collides with the blocks...
+	blockPtr = map->collides (ballRect, ballSpeed, collVector);
+	if (blockPtr != nullptr) {
+		ballCollides = true;
+		map->setBlockNull (blockPtr);
+	}
+	
+		// if collides with any of the walls...
+	else if (walls[WallType::leftW]->collides (ballRect, collVector) ||
 		walls[WallType::rightW]->collides(ballRect, collVector) ||
 		walls[WallType::topW]->collides(ballRect, collVector)) {
 		
 		ballCollides = true;
 	 }
 
-	// if collides with the blocks...
-	else if (map->collides (ballRect, ballSpeed, collVector) != nullptr) {
-		ballCollides = true;
-	}
-	
+
 	// if collides with the paddle...
 	else if (paddle->collides (ballRect, collVector)) {
 		ballCollides = true;
@@ -167,7 +171,7 @@ void Game::update () {
 
 
 void Game::run () {
-	while (!end) {
+	while (!end && !gameOver) {
 		render ();
 		update ();
 

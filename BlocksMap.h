@@ -23,11 +23,17 @@ public:
 	BlocksMap (Game* gamePtr);
 	~BlocksMap ();
 
+	// sets the specified block to nullPtr
+	void setBlockNull (Block* blockPtr);
+
 	// loads data from the .ark files and saves it to a Block matrix (cells); also scales the window size according to the number of rows and cols
 	void load (const string &filename);
 	Block* collides (const SDL_Rect& ballRect, const Vector2D& ballVel, Vector2D& collVector);
 	Block* blockAt (const Vector2D& p);
 	// renders the whole Block matrix
 	void render () const;
+
+private:
+	void getBlockMatrixCoordinates (const Vector2D &point, int &c, int &r);
 };
 
