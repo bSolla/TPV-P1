@@ -90,9 +90,9 @@ public:
 
 private:
 	// initializes SDL and returns true if everything goes smoothly-- false is used to abort
-	bool iniSDL ();
+	void iniSDL ();
 	// initializes all textures and returns true if everything went smoothly-- false used to abort
-	bool iniTextures ();
+	void iniTextures ();
 	// gives the ball and paddle their initial positions, calculated from the map dimensions
 	void positionObjects ();
 

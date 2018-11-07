@@ -2,22 +2,20 @@
 
 
 
-Game::Game () {
-	if (iniSDL ()) {
-		if (iniTextures ()) {
-			walls[WallType::leftW] = new Wall (this, textures[TextureNames::sideWall]);
-			walls[WallType::rightW] = new Wall (this, textures[TextureNames::sideWall]);
-			walls[WallType::topW] = new Wall (this, textures[TextureNames::topWall]);
-			
-			ball = new Ball(this);
-			paddle = new Paddle(this);
-			map = new BlocksMap(this);
+Game::Game() {
+	iniSDL();
+	iniTextures();
+	walls[WallType::leftW] = new Wall(this, textures[TextureNames::sideWall]);
+	walls[WallType::rightW] = new Wall(this, textures[TextureNames::sideWall]);
+	walls[WallType::topW] = new Wall(this, textures[TextureNames::topWall]);
 
-			map->load(LEVEL_SHARED_NAME + to_string(currentLevel) + LEVEL_EXTENSION);
+	ball = new Ball(this);
+	paddle = new Paddle(this);
+	map = new BlocksMap(this);
 
-			positionObjects ();
-		}
-	}
+	map->load(LEVEL_SHARED_NAME + to_string(currentLevel) + LEVEL_EXTENSION);
+
+	positionObjects();
 }
 
 
@@ -38,23 +36,19 @@ Game::~Game () {
 }
 
 
-bool Game::iniSDL () {
-	bool everythingOk = true;
+void Game::iniSDL () {
 
 	SDL_Init(SDL_INIT_EVERYTHING); 
 	window = SDL_CreateWindow("test", WIN_X, WIN_Y, WIN_WIDTH, WIN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE); 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); 
 	
 	if (window == nullptr || renderer == nullptr) {
-		cout << "Error initializing SDL\n";
-		everythingOk = false;
+		throw "Error initializing SDL\n";
 	}
-
-	return everythingOk;
 }
 
 
-bool Game::iniTextures () {
+void Game::iniTextures () {
 	string errorMsg;
 
 	for (uint i = 0; i < NUM_TEXTURES; ++i) {
@@ -62,9 +56,8 @@ bool Game::iniTextures () {
 	}
 
 	errorMsg = SDL_GetError ();
-	cout << errorMsg;
-
-	return errorMsg == ""; // true if sdl_getError didn't catch any errors
+	if (errorMsg != "")
+		throw errorMsg;
 }
 
 
