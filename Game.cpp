@@ -12,7 +12,8 @@ Game::Game () {
 	ball = new Ball(this);
 	paddle = new Paddle(this);
 	map = new BlocksMap(this);
-			
+	// playerInfoManager = new PlayerDataManager ();
+
 	map->load(LEVEL_SHARED_NAME + to_string(currentLevel) + LEVEL_EXTENSION);
 
 	infoBar = new InfoBar (this);
@@ -26,6 +27,7 @@ Game::~Game () {
 	delete paddle;
 	delete map;
 	delete infoBar;
+	// delete playerInfoManager
 
 	for (uint i = 0; i < NUM_TEXTURES; ++i) {
 		delete textures[i];
@@ -110,6 +112,11 @@ void Game::handleLevelUp () {
 		delete infoBar; // delete the old info bar to make a new one
 
 		currentLevel++;
+
+		// playerInfoManager->checkTime (seconds, minutes);
+
+		// delete playerInfoManager; // delete the old player info manager and create a new one
+		// playerInfoManager = new PlayerDataManager;
 
 		if (currentLevel > MAX_LEVEL)
 			end = true;

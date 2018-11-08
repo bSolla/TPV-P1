@@ -53,8 +53,6 @@ void Ball::checkCollisions () {
 			speed.setX (xAux);
 			speed.setY (yAux);
 		}
-
-		position = position + speed;
 	}
 }
 

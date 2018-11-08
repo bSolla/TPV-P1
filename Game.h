@@ -9,6 +9,7 @@
 #include "Paddle.h"
 #include "Wall.h"
 #include "InfoBar.h"
+#include "PlayerDataManager.h"
 
 // ------------------ type definitions ---------------------------------------------------
 struct TextureAttributes {
@@ -59,6 +60,7 @@ private:
 	Ball* ball = nullptr;
 	Paddle* paddle = nullptr;
 	InfoBar* infoBar = nullptr;
+	// PlayerDataManager* playerInfoManager = nullptr;
 
 	bool end = false;
 	bool gameOver = false;

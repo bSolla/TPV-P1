@@ -21,6 +21,7 @@ private:
 
 	Game* game;
 
+// ---------------------- methods ------------------------------------------------------
 public:
 	InfoBar (Game *gamePtr);
 	~InfoBar ();
