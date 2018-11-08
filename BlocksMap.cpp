@@ -168,7 +168,7 @@ void BlocksMap::render () const {
 
 
 void BlocksMap::update () {
-	if (nBlocks <= 30) {
+	if (nBlocks <= 0) {
 		game->setLevelClear ();
 	}
 }
